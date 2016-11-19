@@ -10,7 +10,8 @@ for line in sys.stdin:
         if len(lst)==2:
                 k=lst[0]
                 v=lst[1]
+                v=v.rstrip()
                 if k == "processor":
                         r.incr(str(id)+'_'+'num_processors')
-                        npr = pipe.incr('id'+'_'+'num_processors').get('id'+'_'+'num_processors').execute()[1]
+                        npr = pipe.incr(str(id)+'_'+'num_processors').get(str(id)+'_'+'num_processors').execute()[1]
                 r.hset(str(id)+'_'+'p_'+str(npr),k,v)
