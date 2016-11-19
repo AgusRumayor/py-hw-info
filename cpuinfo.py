@@ -1,14 +1,16 @@
-import sys
+import sys, getopt
+import redis
 
-data ={}
-data['num_processors']=0
+r = redis.StrictRedis(host='188.213.173.100', port=6379, db=0)
+pipe = r.pipeline()
+id = pipe.incr('id').get('id').execute()[1]
+npr =0
 for line in sys.stdin:
         lst = line.split(":")
         if len(lst)==2:
                 k=lst[0]
                 v=lst[1]
                 if k == "processor":
-                        data['num_processors']+=1
-                        data['p_'+str(data['num_processors'])]={}
-                data['p_'+str(data['num_processors'])][k]=v
-print data
+                        r.incr(str(id)+'_'+'num_processors')
+                        npr = pipe.incr('id'+'_'+'num_processors').get('id'+'_'+'num_processors').execute()[1]
+                r.hset(str(id)+'_'+'p_'+str(npr),k,v)
