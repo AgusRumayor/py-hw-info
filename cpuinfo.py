@@ -10,6 +10,7 @@ for line in sys.stdin:
         lst = line.split(":")
         if len(lst)==2:
                 k=lst[0]
+		k=k.replace(" ", "_")
                 v=lst[1]
                 v=v.rstrip()
                 if k == "processor":
